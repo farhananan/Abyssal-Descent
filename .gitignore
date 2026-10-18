@@ -1,0 +1,106 @@
+# ============================================
+# GODOT PROJECT .gitignore
+# ============================================
+# This file tells Git which files to IGNORE.
+# Git will skip these so your repo stays clean,
+# small, and focused only on your actual work.
+# ============================================
+
+# -----------------------------
+# Godot 4+ specific ignores
+# -----------------------------
+
+# Godot’s hidden cache folder – never push this!
+.godot/
+.godot3/
+# Stores texture/audio imports (auto-generated)
+.import/
+# Import cache files (safe to ignore)
+*.import
+# Temporary files
+*.tmp
+# Used by Android, not needed for projects
+.nomedia
+# -----------------------------
+
+# Godot export files (each student will have their own)
+export.cfg
+export_presets.cfg
+export_credentials.cfg
+override.cfg
+
+# Mono-specific (if using C# in Godot)
+.mono/
+data_*/
+mono_crash.*.json
+
+# Godot auto-generated translations
+*.translation
+*.tscn.converted
+*.gdns
+
+# -----------------------------
+# OS FILES (auto-generated)
+# -----------------------------
+
+# macOS system file
+.DS_Store
+# Windows system files
+Thumbs.db
+desktop.ini
+# Linux temporary files
+*~
+
+# -----------------------------
+# CODE EDITOR FILES
+# -----------------------------
+
+# VS Code settings
+.vscode/
+# VS Code workspace file
+*.code-workspace
+# User-specific IDE settings 
+*.user
+# User-specific solution files
+*.suo
+
+# -----------------------------
+# BLENDER FILES
+# -----------------------------
+
+# Blender backup files
+*.blend1
+*.blend2
+*.blend@
+*.blend~
+# Python cache (used if you script in Blender)
+__pycache__/
+*.pyc
+
+# -----------------------------
+# EXPORTS AND BUILDS
+# -----------------------------
+
+# When you export a game (to .exe, .app, .pck, etc.),
+# you’re creating a playable version. These are large
+# files and can always be rebuilt — no need to upload!
+export/
+build/
+bin/
+*.exe
+*.app
+*.dmg
+*.zip
+*.tar.gz
+*.pck
+
+# -----------------------------
+# OTHER FILES TO KEEP REPOS CLEAN
+# -----------------------------
+
+# Logs from debugging
+*.log
+# Backup files                   
+*.bak
+# Extra temporary files                  
+*.tmp
