@@ -1,0 +1,7 @@
+[gd_scene format=3 uid="uid://card85lkheiju"]
+
+[ext_resource type="PackedScene" uid="uid://bcmklyyc3f2v6" path="res://scences/mvp.tscn" id="1_80nbo"]
+
+[node name="Game" type="Node2D" unique_id=1213798120]
+
+[node name="MVP" parent="." unique_id=941202265 instance=ExtResource("1_80nbo")]

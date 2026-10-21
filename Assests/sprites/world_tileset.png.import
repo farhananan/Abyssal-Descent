@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dhhsxnn68i2dt"
-path="res://.godot/imported/Flame.png-87ab657ed20cfe363874b7c2d4b2ce85.ctex"
+uid="uid://hlclfoosa5ks"
+path="res://.godot/imported/world_tileset.png-99100fc4cebcdef1ac985942854b39d6.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Flame.png"
-dest_files=["res://.godot/imported/Flame.png-87ab657ed20cfe363874b7c2d4b2ce85.ctex"]
+source_file="res://Assests/sprites/world_tileset.png"
+dest_files=["res://.godot/imported/world_tileset.png-99100fc4cebcdef1ac985942854b39d6.ctex"]
 
 [params]
 
