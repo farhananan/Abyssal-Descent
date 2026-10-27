@@ -2,12 +2,12 @@ extends CharacterBody2D
 
 signal smash_landed(position)
 
-const SPEED = 200.0
+const SPEED = 300.0
 const JUMP_VELOCITY = -450.0
 const MAX_JUMPS = 2
 const SMASH_SPEED = 900.0
 
-const DASH_SPEED = 700.0
+const DASH_SPEED = 200.0
 const DASH_DURATION = 0.3
 const DASH_COOLDOWN = 0.4
 
@@ -21,6 +21,9 @@ var dash_cooldown_timer = 0.0
 var dash_vector = Vector2.RIGHT
 var facing = 1.0
 var can_air_dash = true
+
+func _ready():
+	add_to_group("player")
 
 func _physics_process(delta):
 	if dash_cooldown_timer > 0:
@@ -52,8 +55,8 @@ func _physics_process(delta):
 
 			var h = Input.get_axis("ui_left", "ui_right")
 			if Input.is_action_pressed("ui_up") and h != 0:
-				# 45 degree diagonal: up + left/right
-				dash_vector = Vector2(h, -1).normalized()
+				# Steeper diagonal: more up than sideways
+				dash_vector = Vector2(h * 0.5, -1).normalized()
 			else:
 				dash_vector = Vector2(facing, 0)
 
@@ -68,6 +71,7 @@ func _physics_process(delta):
 		velocity.x = 0
 		velocity.y = SMASH_SPEED
 
+	# While smashing, ignore jump and horizontal input
 	if is_smashing:
 		move_and_slide()
 		return
@@ -88,3 +92,4 @@ func _physics_process(delta):
 func _on_smash_land():
 	is_smashing = false
 	smash_landed.emit(global_position)
+	# Add your impact effects here: screen shake, particles, sound, etc.
