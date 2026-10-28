@@ -2,13 +2,13 @@ extends CharacterBody2D
 
 signal smash_landed(position)
 
-const SPEED = 300.0
-const JUMP_VELOCITY = -450.0
+const SPEED = 200.0
+const JUMP_VELOCITY = -350.0
 const MAX_JUMPS = 2
 const SMASH_SPEED = 900.0
 
-const DASH_SPEED = 200.0
-const DASH_DURATION = 0.3
+const DASH_SPEED = 350.0
+const DASH_DURATION = 0.2
 const DASH_COOLDOWN = 0.4
 
 var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
@@ -21,6 +21,16 @@ var dash_cooldown_timer = 0.0
 var dash_vector = Vector2.RIGHT
 var facing = 1.0
 var can_air_dash = true
+
+var health = 5
+var invincible = false
+
+var is_attacking = false
+var hit_done = false
+
+@onready var sprite = $AnimatedSprite2D
+@onready var hitbox_shape = $AttackHitbox/CollisionShape2D
+@onready var hitbox_base_x = hitbox_shape.position.x
 
 func _ready():
 	add_to_group("player")
@@ -94,10 +104,6 @@ func _on_smash_land():
 	smash_landed.emit(global_position)
 	# Add your impact effects here: screen shake, particles, sound, etc.
 
-
-var health = 5
-var invincible = false
-
 func take_damage(amount):
 	if invincible:
 		return
@@ -114,13 +120,6 @@ func take_damage(amount):
 	await get_tree().create_timer(1.0).timeout
 	modulate = Color.WHITE
 	invincible = false
-	
-@onready var sprite = $AnimatedSprite2D
-
-var is_attacking = false
-var hit_done = false
-@onready var hitbox_shape = $AttackHitbox/CollisionShape2D
-@onready var hitbox_base_x = hitbox_shape.position.x
 
 func _input(event):
 	if event.is_action_pressed("attack") and not is_attacking:
@@ -141,11 +140,15 @@ func _process(_delta):
 		# The sword lands on one frame of the swing
 		if sprite.animation == "attack" and sprite.frame == 6 and not hit_done:
 			hit_done = true
-			
-			print("Swing hit frame. Touching: ", $AttackHitbox.get_overlapping_bodies())
+
 			for body in $AttackHitbox.get_overlapping_bodies():
 				if body.is_in_group("enemy"):
 					body.take_damage(1)
+		return
+
+	# Optional: play a dash animation if you made one
+	if is_dashing and sprite.sprite_frames.has_animation("dash"):
+		sprite.play("dash")
 		return
 
 	if not is_on_floor():
