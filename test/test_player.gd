@@ -93,3 +93,24 @@ func _on_smash_land():
 	is_smashing = false
 	smash_landed.emit(global_position)
 	# Add your impact effects here: screen shake, particles, sound, etc.
+
+
+var health = 5
+var invincible = false
+
+func take_damage(amount):
+	if invincible:
+		return
+	invincible = true
+	health -= amount
+	print("Health: ", health)
+
+	if health <= 0:
+		get_tree().reload_current_scene.call_deferred()
+		return
+
+	# Flash red and stay immune for 1 second
+	modulate = Color(1, 0.4, 0.4)
+	await get_tree().create_timer(1.0).timeout
+	modulate = Color.WHITE
+	invincible = false
