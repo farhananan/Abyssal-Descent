@@ -398,7 +398,7 @@ position_smoothing_enabled = true
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1059401484]
 texture_filter = 1
-position = Vector2(90.71186, 7.1982837)
+position = Vector2(143.62714, 7.1982837)
 scale = Vector2(3, 3)
 sprite_frames = SubResource("SpriteFrames_e4m6m")
 animation = &"attack"
