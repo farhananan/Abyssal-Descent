@@ -273,7 +273,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_r5sn7")
 }],
-"loop": 1,
+"loop": 0,
 "name": &"death",
 "speed": 10.0
 }, {
@@ -369,7 +369,7 @@ shape = SubResource("RectangleShape2D_8wg3w")
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=771113312]
 texture_filter = 1
 sprite_frames = SubResource("SpriteFrames_e4m6m")
-animation = &"attack"
+animation = &"death"
 
 [node name="Hitbox" type="Area2D" parent="." unique_id=1832841723]
 
