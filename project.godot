@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="Abyssal Descent"
-run/main_scene="uid://bcmklyyc3f2v6"
+run/main_scene="uid://caweyshfdpioc"
 config/features=PackedStringArray("4.7", "GL Compatibility")
 config/icon="res://icon.svg"
 
