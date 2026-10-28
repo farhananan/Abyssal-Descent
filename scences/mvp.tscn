@@ -3,6 +3,7 @@
 [ext_resource type="PackedScene" uid="uid://g7k0dw4hf3pb" path="res://test/test_player.tscn" id="1_00m41"]
 [ext_resource type="Texture2D" uid="uid://hlclfoosa5ks" path="res://Assests/sprites/world_tileset.png" id="2_1h1fh"]
 [ext_resource type="PackedScene" uid="uid://jb5w3ug601h1" path="res://Assests/characters/enemy.tscn" id="3_wqipu"]
+[ext_resource type="Script" uid="uid://b1sdfvki4ihpn" path="res://scences/progress_bar.gd" id="4_j8sr2"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_wqipu"]
 texture = ExtResource("2_1h1fh")
@@ -189,3 +190,14 @@ tile_set = SubResource("TileSet_4naff")
 
 [node name="Enemy" parent="." unique_id=1449670340 instance=ExtResource("3_wqipu")]
 position = Vector2(257, 48)
+
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1774855587]
+
+[node name="ProgressBar" type="ProgressBar" parent="CanvasLayer" unique_id=172080629]
+custom_minimum_size = Vector2(200, 20)
+offset_right = 4.0
+offset_bottom = 27.0
+max_value = 5.0
+value = 5.0
+show_percentage = false
+script = ExtResource("4_j8sr2")
