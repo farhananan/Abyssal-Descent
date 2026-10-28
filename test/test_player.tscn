@@ -236,7 +236,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_gtc01")
 }],
-"loop": 1,
+"loop": 0,
 "name": &"attack",
 "speed": 15.0
 }, {
@@ -380,6 +380,9 @@ animations = [{
 "speed": 12.0
 }]
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_e4m6m"]
+size = Vector2(120.94913, 237.54337)
+
 [node name="Test_Player" type="CharacterBody2D" unique_id=759660980]
 scale = Vector2(0.132287, 0.138922)
 script = ExtResource("1_bom5g")
@@ -398,4 +401,11 @@ texture_filter = 1
 position = Vector2(90.71186, 7.1982837)
 scale = Vector2(3, 3)
 sprite_frames = SubResource("SpriteFrames_e4m6m")
-animation = &"idle"
+animation = &"attack"
+
+[node name="AttackHitbox" type="Area2D" parent="." unique_id=1849863940]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="AttackHitbox" unique_id=248692209]
+position = Vector2(181.42377, 82.78032)
+scale = Vector2(1, 1.0000002)
+shape = SubResource("RectangleShape2D_e4m6m")

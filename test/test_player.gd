@@ -117,9 +117,36 @@ func take_damage(amount):
 	
 @onready var sprite = $AnimatedSprite2D
 
+var is_attacking = false
+var hit_done = false
+@onready var hitbox_shape = $AttackHitbox/CollisionShape2D
+@onready var hitbox_base_x = hitbox_shape.position.x
+
+func _input(event):
+	if event.is_action_pressed("attack") and not is_attacking:
+		is_attacking = true
+		hit_done = false
+		sprite.play("attack")
+		await sprite.animation_finished
+		is_attacking = false
+
 func _process(_delta):
-	# Face the direction she is moving
+	# Face the direction she is moving, and mirror the sword hitbox with her
 	sprite.flip_h = facing < 0
+	var side = 1.0 if facing >= 0 else -1.0
+	hitbox_shape.position.x = sprite.position.x + (hitbox_base_x - sprite.position.x) * side
+
+	# Don't override the attack animation while swinging
+	if is_attacking:
+		# The sword lands on one frame of the swing
+		if sprite.animation == "attack" and sprite.frame == 6 and not hit_done:
+			hit_done = true
+			
+			print("Swing hit frame. Touching: ", $AttackHitbox.get_overlapping_bodies())
+			for body in $AttackHitbox.get_overlapping_bodies():
+				if body.is_in_group("enemy"):
+					body.take_damage(1)
+		return
 
 	if not is_on_floor():
 		sprite.play("jump")
