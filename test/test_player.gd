@@ -114,3 +114,16 @@ func take_damage(amount):
 	await get_tree().create_timer(1.0).timeout
 	modulate = Color.WHITE
 	invincible = false
+	
+@onready var sprite = $AnimatedSprite2D
+
+func _process(_delta):
+	# Face the direction she is moving
+	sprite.flip_h = facing < 0
+
+	if not is_on_floor():
+		sprite.play("jump")
+	elif abs(velocity.x) > 10:
+		sprite.play("run")
+	else:
+		sprite.play("idle")

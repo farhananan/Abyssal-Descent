@@ -30,7 +30,7 @@ func _physics_process(delta):
 		if body.is_in_group("player"):
 			is_attacking = true
 			direction = 1.0 if body.global_position.x > global_position.x else -1.0
-			sprite.flip_h = direction < 0
+			sprite.flip_h = direction > 0
 			sprite.play("attack")
 			return
 
@@ -41,7 +41,7 @@ func _physics_process(delta):
 	if is_on_wall():
 		direction *= -1
 
-	sprite.flip_h = direction < 0
+	sprite.flip_h = direction > 0
 	sprite.play("run")
 
 # The damage lands on one frame of the attack animation
