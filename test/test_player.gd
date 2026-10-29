@@ -121,7 +121,12 @@ func take_damage(amount):
 	modulate = Color.WHITE
 	invincible = false
 
+
 func _input(event):
+	if event.is_action_pressed("ui_cancel"):
+		get_tree().change_scene_to_file("res://scences/main_menu.tscn")
+		return
+	
 	if event.is_action_pressed("attack") and not is_attacking:
 		is_attacking = true
 		hit_done = false
