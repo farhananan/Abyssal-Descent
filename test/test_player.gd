@@ -1,6 +1,7 @@
 extends CharacterBody2D
 
 signal smash_landed(position)
+signal health_changed(new_health)
 
 const SPEED = 200.0
 const JUMP_VELOCITY = -350.0
@@ -22,7 +23,8 @@ var dash_vector = Vector2.RIGHT
 var facing = 1.0
 var can_air_dash = true
 
-var health = 5
+@export var max_health: int = 5
+var health: int = max_health
 var invincible = false
 
 var is_attacking = false
@@ -108,7 +110,8 @@ func take_damage(amount):
 	if invincible:
 		return
 	invincible = true
-	health -= amount
+	health = clamp(health - amount, 0, max_health)
+	health_changed.emit(health)
 	print("Health: ", health)
 
 	if health <= 0:
