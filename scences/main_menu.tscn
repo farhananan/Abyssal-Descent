@@ -150,7 +150,7 @@ text = "Abyssal Descent"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Panel" type="Panel" parent="." unique_id=654649427]
+[node name="Options" type="Panel" parent="." unique_id=654649427]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -165,7 +165,7 @@ grow_horizontal = 2
 grow_vertical = 2
 metadata/_edit_use_anchors_ = true
 
-[node name="Label" type="Label" parent="Panel" unique_id=2086469525]
+[node name="Label" type="Label" parent="Options" unique_id=2086469525]
 layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
@@ -175,23 +175,6 @@ theme_override_font_sizes/font_size = 40
 text = "Options"
 horizontal_alignment = 1
 vertical_alignment = 1
-
-[node name="Button3" type="Button" parent="Panel" unique_id=2022751981]
-layout_mode = 0
-offset_right = 69.0
-offset_bottom = 42.0
-size_flags_vertical = 3
-theme_override_colors/font_color = Color(0, 0, 0, 1)
-theme_override_colors/font_focus_color = Color(0, 0, 0, 1)
-theme_override_colors/font_pressed_color = Color(0, 0, 0, 1)
-theme_override_colors/font_hover_color = Color(0, 0, 0, 1)
-theme_override_font_sizes/font_size = 30
-theme_override_styles/normal = SubResource("StyleBoxFlat_8wg3w")
-theme_override_styles/hover = SubResource("StyleBoxFlat_8v7x5")
-theme_override_styles/hover_pressed = SubResource("StyleBoxFlat_b4yld")
-theme_override_styles/hover_pressed_mirrored = SubResource("StyleBoxFlat_5rel7")
-theme_override_styles/focus = SubResource("StyleBoxEmpty_43s8q")
-text = "Back"
 
 [connection signal="pressed" from="MainButtons/Button" to="." method="_on_start_pressed"]
 [connection signal="pressed" from="MainButtons/Button2" to="." method="_on_options_pressed"]
