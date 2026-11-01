@@ -176,6 +176,33 @@ text = "Options"
 horizontal_alignment = 1
 vertical_alignment = 1
 
+[node name="Back" type="Button" parent="Options" unique_id=736251158]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -170.0
+offset_top = -91.0
+offset_right = 177.0
+offset_bottom = -19.0
+grow_horizontal = 2
+grow_vertical = 0
+size_flags_vertical = 3
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_focus_color = Color(0, 0, 0, 1)
+theme_override_colors/font_pressed_color = Color(0, 0, 0, 1)
+theme_override_colors/font_hover_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 30
+theme_override_styles/normal = SubResource("StyleBoxFlat_8wg3w")
+theme_override_styles/hover = SubResource("StyleBoxFlat_8v7x5")
+theme_override_styles/hover_pressed = SubResource("StyleBoxFlat_b4yld")
+theme_override_styles/hover_pressed_mirrored = SubResource("StyleBoxFlat_5rel7")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_43s8q")
+text = "Back"
+
 [connection signal="pressed" from="MainButtons/Button" to="." method="_on_start_pressed"]
 [connection signal="pressed" from="MainButtons/Button2" to="." method="_on_options_pressed"]
 [connection signal="pressed" from="MainButtons/Button3" to="." method="_on_exit_pressed"]
+[connection signal="pressed" from="Options/Back" to="." method="_on_back_pressed"]
