@@ -233,7 +233,7 @@ physics_layer_0/collision_layer = 1
 sources/0 = SubResource("TileSetAtlasSource_wqipu")
 sources/1 = SubResource("TileSetAtlasSource_cgl87")
 
-[node name="MVP" type="Node2D" unique_id=941202265]
+[node name="Level_2" type="Node2D" unique_id=941202265]
 
 [node name="TextureRect" type="TextureRect" parent="." unique_id=1246254655]
 texture_filter = 1
