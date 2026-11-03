@@ -2,6 +2,7 @@ extends CharacterBody2D
 
 signal smash_landed(position)
 signal health_changed(new_health)
+signal keys_changed(count)
 
 const SPEED = 200.0
 const JUMP_VELOCITY = -350.0
@@ -26,6 +27,8 @@ var can_air_dash = true
 @export var max_health: int = 5
 var health: int = max_health
 var invincible = false
+
+var keys: int = 0
 
 var is_attacking = false
 var hit_done = false
@@ -105,6 +108,10 @@ func _on_smash_land():
 	is_smashing = false
 	smash_landed.emit(global_position)
 	# Add your impact effects here: screen shake, particles, sound, etc.
+
+func add_key() -> void:
+	keys += 1
+	keys_changed.emit(keys)
 
 func take_damage(amount):
 	if invincible:

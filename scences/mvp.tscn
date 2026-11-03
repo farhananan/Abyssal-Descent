@@ -7,7 +7,9 @@
 [ext_resource type="Texture2D" uid="uid://b1cpx81spy1h1" path="res://Assests/backgrounds/pixilart-drawing (2).png" id="5_b533y"]
 [ext_resource type="Script" uid="uid://b1sdfvki4ihpn" path="res://scences/progress_bar.gd" id="6_b533y"]
 [ext_resource type="Script" uid="uid://17xstjxgmup4" path="res://scences/spikes.gd" id="7_0aug3"]
+[ext_resource type="Script" uid="uid://dgciyiie2feq4" path="res://scences/key_label.gd" id="7_p2qh6"]
 [ext_resource type="Script" uid="uid://bnp4n3rpjnmxk" path="res://scences/spikes_2.gd" id="8_p2qh6"]
+[ext_resource type="Script" uid="uid://ti5snv07kkta" path="res://scences/level_exit.gd" id="10_l1qwt"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_wqipu"]
 texture = ExtResource("2_1h1fh")
@@ -238,6 +240,9 @@ sources/1 = SubResource("TileSetAtlasSource_cgl87")
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_vwmp0"]
 size = Vector2(48, 16.5)
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ekfga"]
+size = Vector2(21, 90)
+
 [node name="MVP" type="Node2D" unique_id=941202265]
 
 [node name="TextureRect" type="TextureRect" parent="." unique_id=1246254655]
@@ -284,11 +289,11 @@ tile_set = SubResource("TileSet_4naff")
 [node name="Enemy" parent="." unique_id=1449670340 instance=ExtResource("3_wqipu")]
 position = Vector2(257, 48)
 
-[node name="Enemy" parent="Enemy" unique_id=1110541839 instance=ExtResource("3_wqipu")]
-position = Vector2(587, -4)
+[node name="Enemy2" parent="." unique_id=1110541839 instance=ExtResource("3_wqipu")]
+position = Vector2(844, 44)
 
-[node name="Enemy" parent="Enemy/Enemy" unique_id=1896320424 instance=ExtResource("3_wqipu")]
-position = Vector2(388, 0)
+[node name="Enemy3" parent="." unique_id=1896320424 instance=ExtResource("3_wqipu")]
+position = Vector2(1232, 44)
 
 [node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=318790586]
 
@@ -301,6 +306,13 @@ value = 5.0
 show_percentage = false
 script = ExtResource("6_b533y")
 metadata/_edit_use_anchors_ = true
+
+[node name="KeyLabel" type="Label" parent="CanvasLayer" unique_id=1289590386]
+offset_left = 220.0
+offset_top = 10.0
+offset_right = 260.0
+offset_bottom = 33.0
+script = ExtResource("7_p2qh6")
 
 [node name="Spikes" type="Area2D" parent="." unique_id=998061965]
 script = ExtResource("7_0aug3")
@@ -315,3 +327,11 @@ script = ExtResource("8_p2qh6")
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Spikes2" unique_id=1185893070]
 position = Vector2(56, 71.5)
 shape = SubResource("RectangleShape2D_vwmp0")
+
+[node name="LevelExit" type="Area2D" parent="." unique_id=873094014]
+script = ExtResource("10_l1qwt")
+next_level = "uid://cj6clorsock1d"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="LevelExit" unique_id=384988536]
+position = Vector2(1333.5, 35)
+shape = SubResource("RectangleShape2D_ekfga")
