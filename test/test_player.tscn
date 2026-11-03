@@ -392,10 +392,6 @@ position = Vector2(60.47458, 82.78031)
 scale = Vector2(1, 1.0000002)
 shape = SubResource("RectangleShape2D_1x7gk")
 
-[node name="Camera2D" type="Camera2D" parent="." unique_id=2120347157]
-zoom = Vector2(2, 2)
-position_smoothing_enabled = true
-
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1059401484]
 texture_filter = 1
 position = Vector2(143.62714, 7.1982837)
