@@ -9,7 +9,7 @@
 [ext_resource type="Texture2D" uid="uid://dm7u01wcn1lnj" path="res://Assests/characters/Main Characters/Kitsune/Run.png" id="7_vnanm"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_1x7gk"]
-size = Vector2(136.06781, 237.54337)
+size = Vector2(90.71188, 237.54337)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_aeycm"]
 atlas = ExtResource("2_uirui")
@@ -381,14 +381,14 @@ animations = [{
 }]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_e4m6m"]
-size = Vector2(120.94913, 237.54337)
+size = Vector2(113.38995, 237.54337)
 
 [node name="Test_Player" type="CharacterBody2D" unique_id=759660980]
 scale = Vector2(0.132287, 0.138922)
 script = ExtResource("1_bom5g")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1948382995]
-position = Vector2(60.47458, 82.78031)
+position = Vector2(136.06781, 82.78032)
 scale = Vector2(1, 1.0000002)
 shape = SubResource("RectangleShape2D_1x7gk")
 
@@ -402,6 +402,6 @@ animation = &"attack"
 [node name="AttackHitbox" type="Area2D" parent="." unique_id=1849863940]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="AttackHitbox" unique_id=248692209]
-position = Vector2(181.42377, 82.78032)
+position = Vector2(185.20348, 82.78032)
 scale = Vector2(1, 1.0000002)
 shape = SubResource("RectangleShape2D_e4m6m")
