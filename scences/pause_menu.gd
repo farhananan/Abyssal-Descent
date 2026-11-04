@@ -67,7 +67,7 @@ func _build_ui() -> void:
 	box.add_child(title)
 
 	box.add_child(_make_button("Resume", close_menu))
-	box.add_child(_make_slider_row("Volume", 0.0, 1.0, _current_volume(), _on_volume_changed))
+	box.add_child(_make_slider_row("Music", 0.0, 1.0, _current_volume(), _on_volume_changed))
 	box.add_child(_make_slider_row("Brightness", 0.3, 1.0, brightness, _on_brightness_changed))
 	box.add_child(_make_button("Main Menu", _on_main_menu))
 	box.add_child(_make_button("Quit Game", _on_quit))
@@ -110,12 +110,18 @@ func close_menu() -> void:
 	overlay.hide()
 	icon_button.show()
 
+# Uses the "Music" bus if it exists, otherwise falls back to Master
+func _music_bus() -> int:
+	var i := AudioServer.get_bus_index("Music")
+	return i if i != -1 else 0
+
 func _current_volume() -> float:
-	return db_to_linear(AudioServer.get_bus_volume_db(0))
+	return db_to_linear(AudioServer.get_bus_volume_db(_music_bus()))
 
 func _on_volume_changed(v: float) -> void:
-	AudioServer.set_bus_volume_db(0, linear_to_db(max(v, 0.0001)))
-	AudioServer.set_bus_mute(0, v <= 0.001)
+	var bus := _music_bus()
+	AudioServer.set_bus_volume_db(bus, linear_to_db(max(v, 0.0001)))
+	AudioServer.set_bus_mute(bus, v <= 0.001)
 
 func _on_brightness_changed(v: float) -> void:
 	brightness = v
