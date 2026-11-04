@@ -407,5 +407,6 @@ shape = SubResource("RectangleShape2D_vwmp0")
 stream = ExtResource("15_vmai3")
 volume_db = -10.0
 autoplay = true
+bus = &"Music"
 
 [node name="PauseMenu" parent="." unique_id=157170144 instance=ExtResource("16_fnkl7")]
