@@ -15,7 +15,7 @@
 [ext_resource type="Texture2D" uid="uid://cu0idvc4m42j8" path="res://Assests/sprites/stone_door_half_open.png" id="13_vmai3"]
 [ext_resource type="Texture2D" uid="uid://c7cn1nuinuig1" path="res://Assests/sprites/stone_door_open.png" id="14_fnkl7"]
 [ext_resource type="AudioStream" uid="uid://bx53pumlchjlw" path="res://Assests/music/02.mp3" id="15_vmai3"]
-[ext_resource type="Script" uid="uid://c5eisqoheni3h" path="res://scences/pause_menu.gd" id="16_fnkl7"]
+[ext_resource type="PackedScene" uid="uid://c2nc8paun0x7x" path="res://scences/pause_menu.tscn" id="16_fnkl7"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_wqipu"]
 texture = ExtResource("2_1h1fh")
@@ -408,5 +408,4 @@ stream = ExtResource("15_vmai3")
 volume_db = -10.0
 autoplay = true
 
-[node name="PauseMenu" type="CanvasLayer" parent="." unique_id=1879764421]
-script = ExtResource("16_fnkl7")
+[node name="PauseMenu" parent="." unique_id=157170144 instance=ExtResource("16_fnkl7")]
