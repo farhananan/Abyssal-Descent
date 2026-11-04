@@ -1,0 +1,8 @@
+[gd_scene format=3 uid="uid://do35fg7wplt60"]
+
+[ext_resource type="AudioStream" uid="uid://bx53pumlchjlw" path="res://Assests/music/02.mp3" id="1_7ga04"]
+
+[node name="MusicPlayer" type="AudioStreamPlayer2D" unique_id=1198178968]
+process_mode = 3
+stream = ExtResource("1_7ga04")
+autoplay = true

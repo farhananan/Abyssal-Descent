@@ -14,6 +14,8 @@
 [ext_resource type="Texture2D" uid="uid://f1nwhl40lfti" path="res://Assests/sprites/stone_door_closed.png" id="12_7xt50"]
 [ext_resource type="Texture2D" uid="uid://cu0idvc4m42j8" path="res://Assests/sprites/stone_door_half_open.png" id="13_vmai3"]
 [ext_resource type="Texture2D" uid="uid://c7cn1nuinuig1" path="res://Assests/sprites/stone_door_open.png" id="14_fnkl7"]
+[ext_resource type="AudioStream" uid="uid://bx53pumlchjlw" path="res://Assests/music/02.mp3" id="15_vmai3"]
+[ext_resource type="Script" uid="uid://c5eisqoheni3h" path="res://scences/pause_menu.gd" id="16_fnkl7"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_wqipu"]
 texture = ExtResource("2_1h1fh")
@@ -400,3 +402,11 @@ script = ExtResource("7_0aug3")
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Spikes6" unique_id=2126779100]
 position = Vector2(1048, 72)
 shape = SubResource("RectangleShape2D_vwmp0")
+
+[node name="Level1Music" type="AudioStreamPlayer" parent="." unique_id=57121342]
+stream = ExtResource("15_vmai3")
+volume_db = -10.0
+autoplay = true
+
+[node name="PauseMenu" type="CanvasLayer" parent="." unique_id=1879764421]
+script = ExtResource("16_fnkl7")
