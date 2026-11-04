@@ -1,11 +1,14 @@
 [gd_scene format=3 uid="uid://caweyshfdpioc"]
 
 [ext_resource type="Script" uid="uid://ctg487ik3rgix" path="res://scences/main_menu.gd" id="1_8v7x5"]
-[ext_resource type="Texture2D" uid="uid://bwhatw2utlvge" path="res://scences/neuschwanenstein.jpeg" id="1_wa8ii"]
 [ext_resource type="FontFile" uid="uid://qudkr1ott417" path="res://Assests/fonts/Noctra.otf" id="2_5rel7"]
+[ext_resource type="Texture2D" uid="uid://dg851otkuwwop" path="res://scences/Cave01.webp" id="2_43s8q"]
+[ext_resource type="AudioStream" uid="uid://swvnma4ql1ck" path="res://Assests/music/time_for_adventure.mp3" id="3_b4yld"]
+[ext_resource type="Script" uid="uid://dn5sbk3mmalso" path="res://scences/audio_control.gd" id="5_43s8q"]
+[ext_resource type="Script" uid="uid://1kt46v3qj58r" path="res://scences/fullscreencontrol.gd" id="6_shbnm"]
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_g7g1y"]
-texture = ExtResource("1_wa8ii")
+texture = ExtResource("2_43s8q")
 modulate_color = Color(0.53436106, 0.53436106, 0.534361, 1)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_8wg3w"]
@@ -49,6 +52,13 @@ shadow_size = 5
 shadow_offset = Vector2(0, 3.41)
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_43s8q"]
+
+[sub_resource type="StyleBoxLine" id="StyleBoxLine_8wg3w"]
+color = Color(1, 1, 1, 1)
+thickness = 6
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_4naff"]
+bg_color = Color(0.6392831, 0.021798031, 0.99999994, 1)
 
 [node name="MainMenu" type="Control" unique_id=561095925]
 layout_mode = 3
@@ -150,6 +160,11 @@ text = "Abyssal Descent"
 horizontal_alignment = 1
 vertical_alignment = 1
 
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=248796166]
+stream = ExtResource("3_b4yld")
+autoplay = true
+bus = &"Music"
+
 [node name="Options" type="Panel" parent="." unique_id=654649427]
 layout_mode = 1
 anchors_preset = 8
@@ -202,7 +217,41 @@ theme_override_styles/hover_pressed_mirrored = SubResource("StyleBoxFlat_5rel7")
 theme_override_styles/focus = SubResource("StyleBoxEmpty_43s8q")
 text = "Back"
 
+[node name="AudioControl" type="HSlider" parent="Options" unique_id=142284963]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -185.5
+offset_top = -142.0
+offset_right = 185.5
+offset_bottom = -86.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/slider = SubResource("StyleBoxLine_8wg3w")
+theme_override_styles/grabber_area = SubResource("StyleBoxFlat_4naff")
+theme_override_styles/grabber_area_highlight = SubResource("StyleBoxFlat_4naff")
+max_value = 1.0
+step = 0.05
+value = 1.0
+script = ExtResource("5_43s8q")
+audio_bus_name = "Music"
+
+[node name="Fullscreencontrol" type="CheckButton" parent="Options" unique_id=649657891]
+layout_mode = 0
+offset_left = 174.5
+offset_top = 157.0
+offset_right = 496.5
+offset_bottom = 232.0
+theme_override_font_sizes/font_size = 32
+text = "Fullscreen"
+script = ExtResource("6_shbnm")
+
 [connection signal="pressed" from="MainButtons/Button" to="." method="_on_start_pressed"]
 [connection signal="pressed" from="MainButtons/Button2" to="." method="_on_options_pressed"]
 [connection signal="pressed" from="MainButtons/Button3" to="." method="_on_exit_pressed"]
 [connection signal="pressed" from="Options/Back" to="." method="_on_back_pressed"]
+[connection signal="value_changed" from="Options/AudioControl" to="Options/AudioControl" method="_on_value_changed"]
+[connection signal="toggled" from="Options/Fullscreencontrol" to="Options/Fullscreencontrol" method="_on_toggled"]

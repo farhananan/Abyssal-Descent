@@ -2,6 +2,7 @@ extends CharacterBody2D
 
 const SPEED = 60.0
 const ATTACK_HIT_FRAME = 3
+const KEY_SCENE = preload("res://scences/key.tscn")
 
 var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
 var direction = 1.0
@@ -29,9 +30,19 @@ func take_damage(amount):
 		hitbox.set_deferred("monitoring", false)
 		attack_range.set_deferred("monitoring", false)
 		sprite.play("death")
+		_spawn_key.call_deferred(global_position)
 	else:
 		is_hurt = true
 		sprite.play("hurt")
+
+func _spawn_key(pos: Vector2) -> void:
+	print("1: spawning key")
+	var key = KEY_SCENE.instantiate()
+	print("2: instantiated ", key)
+	get_tree().current_scene.add_child(key)
+	print("3: added to ", get_tree().current_scene.name)
+	key.global_position = pos
+	print("4: placed at ", pos)
 
 func _physics_process(delta):
 	if not is_on_floor():
@@ -74,5 +85,5 @@ func _on_animation_finished():
 		is_attacking = false
 	elif sprite.animation == "hurt":
 		is_hurt = false
-	elif sprite.animation == "die":
+	elif sprite.animation == "death":
 		queue_free()
