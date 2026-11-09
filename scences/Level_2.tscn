@@ -7,8 +7,8 @@
 [ext_resource type="Texture2D" uid="uid://c5460r6p1xsef" path="res://Assests/sprites/pixilart-sprite.png" id="4_u8akg"]
 [ext_resource type="PackedScene" uid="uid://jb5w3ug601h1" path="res://Assests/characters/enemy.tscn" id="5_u8akg"]
 [ext_resource type="Script" uid="uid://b1sdfvki4ihpn" path="res://scences/progress_bar.gd" id="6_n0sqq"]
-[ext_resource type="Script" uid="uid://dp0kiwfg0lad3" path="res://scences/camera_2d.gd" id="7_lo287"]
 [ext_resource type="PackedScene" uid="uid://c2nc8paun0x7x" path="res://scences/pause_menu.tscn" id="8_kb5eg"]
+[ext_resource type="Script" uid="uid://dd2hiogy0w3hd" path="res://scences/camera_2d.lvl1.gd" id="8_u8akg"]
 [ext_resource type="Script" uid="uid://dy18gdosm36he" path="res://scences/area_2d.gd" id="10_u8akg"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_wqipu"]
@@ -393,7 +393,7 @@ position = Vector2(-7, 54.000008)
 
 [node name="Camera2D" type="Camera2D" parent="Test_Player" unique_id=1731561640]
 zoom = Vector2(2.5, 2.5)
-script = ExtResource("7_lo287")
+script = ExtResource("8_u8akg")
 
 [node name="PauseMenu" parent="." unique_id=157170144 instance=ExtResource("8_kb5eg")]
 

@@ -50,7 +50,7 @@ func _physics_process(delta):
 		velocity = dash_vector * DASH_SPEED
 		if dash_timer <= 0:
 			is_dashing = false
-			velocity.y = 0  # don't carry upward speed out of the dash
+			velocity.y = 0
 		move_and_slide()
 		return
 
@@ -62,18 +62,13 @@ func _physics_process(delta):
 		if is_smashing:
 			_on_smash_land()
 
-	# Start a dash
+	# Start a dash (always horizontal, in the direction you're facing)
 	if Input.is_action_just_pressed("dash") and dash_cooldown_timer <= 0 and not is_smashing:
 		if is_on_floor() or can_air_dash:
 			if not is_on_floor():
 				can_air_dash = false
 
-			var h = Input.get_axis("ui_left", "ui_right")
-			if Input.is_action_pressed("ui_up") and h != 0:
-				# Steeper diagonal: more up than sideways
-				dash_vector = Vector2(h * 0.5, -1).normalized()
-			else:
-				dash_vector = Vector2(facing, 0)
+			dash_vector = Vector2(facing, 0)
 
 			is_dashing = true
 			dash_timer = DASH_DURATION
@@ -130,7 +125,6 @@ func take_damage(amount):
 	await get_tree().create_timer(1.0).timeout
 	modulate = Color.WHITE
 	invincible = false
-
 
 func _input(event):
 	if event.is_action_pressed("attack") and not is_attacking:

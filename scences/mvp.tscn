@@ -2,8 +2,8 @@
 
 [ext_resource type="PackedScene" uid="uid://g7k0dw4hf3pb" path="res://test/test_player.tscn" id="1_00m41"]
 [ext_resource type="Texture2D" uid="uid://hlclfoosa5ks" path="res://Assests/sprites/world_tileset.png" id="2_1h1fh"]
-[ext_resource type="Script" uid="uid://dp0kiwfg0lad3" path="res://scences/camera_2d.gd" id="3_0ubn4"]
 [ext_resource type="Texture2D" uid="uid://bvw54t7fi831" path="res://Assests/sprites/tile_set_aleatorio.png" id="3_fdsva"]
+[ext_resource type="Script" uid="uid://dd2hiogy0w3hd" path="res://scences/camera_2d.lvl1.gd" id="3_fnkl7"]
 [ext_resource type="PackedScene" uid="uid://jb5w3ug601h1" path="res://Assests/characters/enemy.tscn" id="3_wqipu"]
 [ext_resource type="Texture2D" uid="uid://b1cpx81spy1h1" path="res://Assests/backgrounds/pixilart-drawing (2).png" id="5_b533y"]
 [ext_resource type="Script" uid="uid://b1sdfvki4ihpn" path="res://scences/progress_bar.gd" id="6_b533y"]
@@ -312,7 +312,7 @@ position = Vector2(-7, 54.000008)
 
 [node name="Camera2D" type="Camera2D" parent="Test_Player" unique_id=1501289286]
 zoom = Vector2(2.5, 2.5)
-script = ExtResource("3_0ubn4")
+script = ExtResource("3_fnkl7")
 
 [node name="TileMapLayer" type="TileMapLayer" parent="." unique_id=639600808]
 texture_filter = 1
