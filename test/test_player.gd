@@ -13,6 +13,10 @@ const DASH_SPEED = 350.0
 const DASH_DURATION = 0.2
 const DASH_COOLDOWN = 0.4
 
+# Wall jump settings
+const WALL_JUMP_PUSH = 200.0       # how hard you're pushed away from the wall
+const WALL_JUMP_LOCK_TIME = 0.15   # seconds that left/right input is ignored after a wall jump
+
 var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
 var jumps_left = MAX_JUMPS
 var is_smashing = false
@@ -24,6 +28,8 @@ var dash_vector = Vector2.RIGHT
 var facing = 1.0
 var can_air_dash = true
 
+var wall_jump_lock = 0.0
+
 @export var max_health: int = 5
 var health: int = max_health
 var invincible = false
@@ -33,12 +39,16 @@ var keys: int = 0
 var is_attacking = false
 var hit_done = false
 
+# Where the player goes when pressing R. Starts as the level's start position.
+var spawn_point: Vector2
+
 @onready var sprite = $AnimatedSprite2D
 @onready var hitbox_shape = $AttackHitbox/CollisionShape2D
 @onready var hitbox_base_x = hitbox_shape.position.x
 
 func _ready():
 	add_to_group("player")
+	spawn_point = global_position
 
 func _physics_process(delta):
 	if dash_cooldown_timer > 0:
@@ -86,23 +96,72 @@ func _physics_process(delta):
 		move_and_slide()
 		return
 
-	# Jump / double jump
-	if Input.is_action_just_pressed("ui_accept") and jumps_left > 0:
+	# Are we touching a wall made of wall-jumpable tiles?
+	var wall_normal := Vector2.ZERO
+	if not is_on_floor() and is_on_wall():
+		wall_normal = _get_wall_jump_normal()
+
+		# Jump: wall jump (space bar only) first, then normal / double jump
+	if Input.is_action_just_pressed("wall_jump") and wall_normal != Vector2.ZERO:
+		velocity.y = JUMP_VELOCITY
+		velocity.x = wall_normal.x * WALL_JUMP_PUSH
+		wall_jump_lock = WALL_JUMP_LOCK_TIME
+		facing = sign(wall_normal.x)
+		jumps_left = MAX_JUMPS - 1  # the wall jump counts as your first jump, so one air jump is ready
+	elif Input.is_action_just_pressed("ui_accept") and jumps_left > 0:
 		velocity.y = JUMP_VELOCITY
 		jumps_left -= 1
 
-	# Left/right movement
-	var direction = Input.get_axis("ui_left", "ui_right")
-	if direction != 0:
-		facing = sign(direction)
-	velocity.x = direction * SPEED
+	# Left/right movement (briefly disabled right after a wall jump)
+	if wall_jump_lock > 0:
+		wall_jump_lock -= delta
+	else:
+		var direction = Input.get_axis("ui_left", "ui_right")
+		if direction != 0:
+			facing = sign(direction)
+		velocity.x = direction * SPEED
 
 	move_and_slide()
+
+# Returns the wall's normal if we're touching a tile marked wall_jump, otherwise Vector2.ZERO
+func _get_wall_jump_normal() -> Vector2:
+	for i in get_slide_collision_count():
+		var col := get_slide_collision(i)
+		var normal := col.get_normal()
+		if abs(normal.x) < 0.9:
+			continue  # floor or ceiling, not a wall
+
+		var tilemap := col.get_collider() as TileMapLayer
+		if tilemap == null:
+			continue
+
+		# Find the tile by looking just inside the wall at the point we touched it
+		var probe := col.get_position() - normal * 2.0
+		var coords := tilemap.local_to_map(tilemap.to_local(probe))
+		var data := tilemap.get_cell_tile_data(coords)
+
+		if data != null and data.get_custom_data("wall_jump"):
+			return normal
+	return Vector2.ZERO
 
 func _on_smash_land():
 	is_smashing = false
 	smash_landed.emit(global_position)
 	# Add your impact effects here: screen shake, particles, sound, etc.
+
+# Called by checkpoints when the player touches them
+func set_checkpoint(pos: Vector2) -> void:
+	spawn_point = pos
+
+func respawn() -> void:
+	global_position = spawn_point
+	velocity = Vector2.ZERO
+	is_dashing = false
+	is_smashing = false
+	jumps_left = MAX_JUMPS
+	can_air_dash = true
+	dash_cooldown_timer = 0.0
+	wall_jump_lock = 0.0
 
 func add_key() -> void:
 	keys += 1
@@ -114,7 +173,6 @@ func take_damage(amount):
 	invincible = true
 	health = clamp(health - amount, 0, max_health)
 	health_changed.emit(health)
-	print("Health: ", health)
 
 	if health <= 0:
 		get_tree().reload_current_scene.call_deferred()
@@ -127,6 +185,9 @@ func take_damage(amount):
 	invincible = false
 
 func _input(event):
+	if event.is_action_pressed("respawn"):
+		respawn()
+
 	if event.is_action_pressed("attack") and not is_attacking:
 		is_attacking = true
 		hit_done = false
