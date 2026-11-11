@@ -6,6 +6,7 @@ static var brightness := 1.0
 var dim: ColorRect
 var overlay: Control
 var icon_button: Button
+var mode_option: OptionButton
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS  # keep working while the game is paused
@@ -69,6 +70,7 @@ func _build_ui() -> void:
 	box.add_child(_make_button("Resume", close_menu))
 	box.add_child(_make_slider_row("Music", 0.0, 1.0, _current_volume(), _on_volume_changed))
 	box.add_child(_make_slider_row("Brightness", 0.3, 1.0, brightness, _on_brightness_changed))
+	box.add_child(_make_mode_row())
 	box.add_child(_make_button("Main Menu", _on_main_menu))
 	box.add_child(_make_button("Quit Game", _on_quit))
 
@@ -92,6 +94,19 @@ func _make_slider_row(label: String, min_v: float, max_v: float, start: float, c
 	row.add_child(s)
 	return row
 
+func _make_mode_row() -> VBoxContainer:
+	var row := VBoxContainer.new()
+	var l := Label.new()
+	l.text = "Display Mode"
+	row.add_child(l)
+	mode_option = OptionButton.new()
+	mode_option.add_item("Windowed")
+	mode_option.add_item("Fullscreen")
+	mode_option.item_selected.connect(_on_mode_selected)
+	row.add_child(mode_option)
+	_sync_mode_option()
+	return row
+
 func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("ui_cancel"):
 		if overlay.visible:
@@ -101,6 +116,7 @@ func _input(event: InputEvent) -> void:
 		get_viewport().set_input_as_handled()
 
 func open_menu() -> void:
+	_sync_mode_option()  # make sure the dropdown matches the real window state
 	get_tree().paused = true
 	overlay.show()
 	icon_button.hide()
@@ -109,6 +125,18 @@ func close_menu() -> void:
 	get_tree().paused = false
 	overlay.hide()
 	icon_button.show()
+
+# Matches the dropdown to the actual window mode (it may have been changed in another scene)
+func _sync_mode_option() -> void:
+	var m := DisplayServer.window_get_mode()
+	var is_full := m == DisplayServer.WINDOW_MODE_FULLSCREEN or m == DisplayServer.WINDOW_MODE_EXCLUSIVE_FULLSCREEN
+	mode_option.select(1 if is_full else 0)
+
+func _on_mode_selected(index: int) -> void:
+	if index == 1:
+		DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_FULLSCREEN)
+	else:
+		DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_WINDOWED)
 
 # Uses the "Music" bus if it exists, otherwise falls back to Master
 func _music_bus() -> int:
