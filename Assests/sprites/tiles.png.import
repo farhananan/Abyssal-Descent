@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cerkx7a6vid2u"
-path="res://.godot/imported/Crystal_Caves_Forest_2D_Platformer_Tileset_Environment - Crystal spike.png-a772603ea445e68e4c01d7649196cae3.ctex"
+uid="uid://bcg6ggfm8f55h"
+path="res://.godot/imported/tiles.png-d4a8981d764364d9887d2014161b018a.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assests/tileset-cave/PNG/Environment/Crystal_Caves_Forest_2D_Platformer_Tileset_Environment - Crystal spike.png"
-dest_files=["res://.godot/imported/Crystal_Caves_Forest_2D_Platformer_Tileset_Environment - Crystal spike.png-a772603ea445e68e4c01d7649196cae3.ctex"]
+source_file="res://Assests/sprites/tiles.png"
+dest_files=["res://.godot/imported/tiles.png-d4a8981d764364d9887d2014161b018a.ctex"]
 
 [params]
 
