@@ -17,6 +17,11 @@ const DASH_COOLDOWN = 0.4
 const WALL_JUMP_PUSH = 200.0       # how hard you're pushed away from the wall
 const WALL_JUMP_LOCK_TIME = 0.15   # seconds that left/right input is ignored after a wall jump
 
+# Crystal dash settings (hold the dash button on a crystal block)
+const CRYSTAL_CHARGE_TIME = 0.7    # seconds you must hold the button before it's ready
+const CRYSTAL_SPEED = 600.0        # launch speed
+const CRYSTAL_MAX_TIME = 1.5       # the dash stops after this long even if no wall is hit
+
 var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
 var jumps_left = MAX_JUMPS
 var is_smashing = false
@@ -30,6 +35,13 @@ var can_air_dash = true
 
 var wall_jump_lock = 0.0
 
+var is_crystal_charging = false
+var crystal_charge_time := 0.0
+var crystal_normal := Vector2.ZERO
+var is_crystal_dashing = false
+var crystal_dash_timer = 0.0
+var crystal_dir := Vector2.RIGHT
+
 @export var max_health: int = 5
 var health: int = max_health
 var invincible = false
@@ -41,6 +53,9 @@ var hit_done = false
 
 # Where the player goes when pressing R. Starts as the level's start position.
 var spawn_point: Vector2
+
+# Remembers which missing tile data names we've already warned about
+var _missing_layer_warned := {}
 
 @onready var sprite = $AnimatedSprite2D
 @onready var hitbox_shape = $AttackHitbox/CollisionShape2D
@@ -64,6 +79,40 @@ func _physics_process(delta):
 		move_and_slide()
 		return
 
+	# Crystal dash: launching (no gravity, stops when it hits a wall)
+	if is_crystal_dashing:
+		crystal_dash_timer -= delta
+		velocity = crystal_dir * CRYSTAL_SPEED
+		move_and_slide()
+		var hit_wall: bool = is_on_wall() and get_wall_normal().dot(crystal_dir) < -0.5
+		if crystal_dash_timer <= 0 or hit_wall:
+			is_crystal_dashing = false
+			velocity = Vector2.ZERO
+		return
+
+	# Crystal dash: charging (frozen in place while the dash button is held)
+	if is_crystal_charging:
+		crystal_charge_time += delta
+		velocity = Vector2.ZERO
+		if not Input.is_action_pressed("dash"):
+			is_crystal_charging = false
+			if crystal_charge_time >= CRYSTAL_CHARGE_TIME:
+				_start_crystal_dash()
+			else:
+				_try_start_dash()  # quick tap: do a normal dash instead
+		move_and_slide()
+		return
+
+	# Pressing dash while touching a crystal tile starts charging
+	if Input.is_action_just_pressed("dash") and not is_smashing:
+		var n := _get_crystal_normal()
+		if n != Vector2.ZERO:
+			is_crystal_charging = true
+			crystal_charge_time = 0.0
+			crystal_normal = n
+			velocity = Vector2.ZERO
+			return
+
 	if not is_on_floor():
 		velocity.y += gravity * delta
 	else:
@@ -72,18 +121,9 @@ func _physics_process(delta):
 		if is_smashing:
 			_on_smash_land()
 
-	# Start a dash (always horizontal, in the direction you're facing)
-	if Input.is_action_just_pressed("dash") and dash_cooldown_timer <= 0 and not is_smashing:
-		if is_on_floor() or can_air_dash:
-			if not is_on_floor():
-				can_air_dash = false
-
-			dash_vector = Vector2(facing, 0)
-
-			is_dashing = true
-			dash_timer = DASH_DURATION
-			dash_cooldown_timer = DASH_COOLDOWN
-			return
+	# Normal dash (always horizontal, in the direction you're facing)
+	if Input.is_action_just_pressed("dash") and _try_start_dash():
+		return
 
 	# Down smash
 	if Input.is_action_just_pressed("ui_down") and not is_on_floor() and not is_smashing:
@@ -101,7 +141,7 @@ func _physics_process(delta):
 	if not is_on_floor() and is_on_wall():
 		wall_normal = _get_wall_jump_normal()
 
-		# Jump: wall jump (space bar only) first, then normal / double jump
+	# Jump: wall jump (space bar only) first, then normal / double jump
 	if Input.is_action_just_pressed("wall_jump") and wall_normal != Vector2.ZERO:
 		velocity.y = JUMP_VELOCITY
 		velocity.x = wall_normal.x * WALL_JUMP_PUSH
@@ -123,6 +163,37 @@ func _physics_process(delta):
 
 	move_and_slide()
 
+# Starts a normal dash if allowed. Returns true if it started.
+func _try_start_dash() -> bool:
+	if dash_cooldown_timer > 0 or is_smashing:
+		return false
+	if not is_on_floor() and not can_air_dash:
+		return false
+
+	if not is_on_floor():
+		can_air_dash = false
+
+	dash_vector = Vector2(facing, 0)
+	is_dashing = true
+	dash_timer = DASH_DURATION
+	dash_cooldown_timer = DASH_COOLDOWN
+	return true
+
+# True if the tile at these coordinates has the given custom data flag set.
+# Warns once (instead of erroring) if the TileSet has no custom data layer with that name.
+func _tile_has_flag(tilemap: TileMapLayer, coords: Vector2i, flag: String) -> bool:
+	var data := tilemap.get_cell_tile_data(coords)
+	if data == null:
+		return false
+
+	if tilemap.tile_set.get_custom_data_layer_by_name(flag) == -1:
+		if not _missing_layer_warned.has(flag):
+			_missing_layer_warned[flag] = true
+			push_warning("TileSet has no custom data layer named '%s'" % flag)
+		return false
+
+	return bool(data.get_custom_data(flag))
+
 # Returns the wall's normal if we're touching a tile marked wall_jump, otherwise Vector2.ZERO
 func _get_wall_jump_normal() -> Vector2:
 	for i in get_slide_collision_count():
@@ -138,11 +209,41 @@ func _get_wall_jump_normal() -> Vector2:
 		# Find the tile by looking just inside the wall at the point we touched it
 		var probe := col.get_position() - normal * 2.0
 		var coords := tilemap.local_to_map(tilemap.to_local(probe))
-		var data := tilemap.get_cell_tile_data(coords)
 
-		if data != null and data.get_custom_data("wall_jump"):
+		if _tile_has_flag(tilemap, coords, "wall_jump"):
 			return normal
 	return Vector2.ZERO
+
+# Returns the surface normal if we're standing on or touching a tile marked crystal_dash
+func _get_crystal_normal() -> Vector2:
+	for i in get_slide_collision_count():
+		var col := get_slide_collision(i)
+		var normal := col.get_normal()
+		if normal.y > 0.7:
+			continue  # ceiling
+
+		var tilemap := col.get_collider() as TileMapLayer
+		if tilemap == null:
+			continue
+
+		var probe := col.get_position() - normal * 2.0
+		var coords := tilemap.local_to_map(tilemap.to_local(probe))
+
+		if _tile_has_flag(tilemap, coords, "crystal_dash"):
+			return normal
+	return Vector2.ZERO
+
+func _start_crystal_dash() -> void:
+	var dir_x := Input.get_axis("ui_left", "ui_right")
+	if abs(crystal_normal.x) > 0.9:
+		dir_x = sign(crystal_normal.x)  # charged on a wall: launch away from it
+	elif dir_x == 0:
+		dir_x = facing                  # charged on the floor: launch where you hold, or where you face
+
+	crystal_dir = Vector2(sign(dir_x), 0)
+	facing = sign(dir_x)
+	is_crystal_dashing = true
+	crystal_dash_timer = CRYSTAL_MAX_TIME
 
 func _on_smash_land():
 	is_smashing = false
@@ -158,6 +259,8 @@ func respawn() -> void:
 	velocity = Vector2.ZERO
 	is_dashing = false
 	is_smashing = false
+	is_crystal_charging = false
+	is_crystal_dashing = false
 	jumps_left = MAX_JUMPS
 	can_air_dash = true
 	dash_cooldown_timer = 0.0
@@ -188,7 +291,7 @@ func _input(event):
 	if event.is_action_pressed("respawn"):
 		respawn()
 
-	if event.is_action_pressed("attack") and not is_attacking:
+	if event.is_action_pressed("attack") and not is_attacking and not is_crystal_charging and not is_crystal_dashing:
 		is_attacking = true
 		hit_done = false
 		sprite.play("attack")
@@ -201,6 +304,15 @@ func _process(_delta):
 	var side = 1.0 if facing >= 0 else -1.0
 	hitbox_shape.position.x = sprite.position.x + (hitbox_base_x - sprite.position.x) * side
 
+	# Tint the sprite while using the crystal dash
+	if is_crystal_charging:
+		var charged: bool = crystal_charge_time >= CRYSTAL_CHARGE_TIME
+		sprite.modulate = Color(0.3, 1, 1) if charged else Color(0.7, 0.9, 1)
+	elif is_crystal_dashing:
+		sprite.modulate = Color(0.4, 1, 1)
+	else:
+		sprite.modulate = Color.WHITE
+
 	# Don't override the attack animation while swinging
 	if is_attacking:
 		# The sword lands on one frame of the swing
@@ -210,6 +322,11 @@ func _process(_delta):
 			for body in $AttackHitbox.get_overlapping_bodies():
 				if body.is_in_group("enemy"):
 					body.take_damage(1)
+		return
+
+	# Optional: play a crystal animation if you made one
+	if (is_crystal_charging or is_crystal_dashing) and sprite.sprite_frames.has_animation("crystal"):
+		sprite.play("crystal")
 		return
 
 	# Optional: play a dash animation if you made one
