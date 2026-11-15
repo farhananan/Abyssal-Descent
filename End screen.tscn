@@ -1,0 +1,28 @@
+[gd_scene format=3 uid="uid://rbag6hg1c2y5"]
+
+[ext_resource type="Texture2D" uid="uid://bfjdc6h3501ep" path="res://scences/pixilart-drawing (5).png" id="1_hiti1"]
+[ext_resource type="Script" uid="uid://v221ogbqcjxw" path="res://end_screen.gd" id="1_jfyn1"]
+[ext_resource type="AudioStream" uid="uid://db8vkkrugaypn" path="res://scences/mfcc-winner-winner-champions-victory-music-335679.mp3" id="3_can3l"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_g7g1y"]
+texture = ExtResource("1_hiti1")
+
+[node name="Control" type="Control" unique_id=848958543]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_jfyn1")
+
+[node name="Panel" type="Panel" parent="." unique_id=1506213693]
+layout_mode = 0
+offset_top = -144.0
+offset_right = 1152.0
+offset_bottom = 648.0
+theme_override_styles/panel = SubResource("StyleBoxTexture_g7g1y")
+
+[node name="MfccWinnerWinnerChampionsVictoryMusic335679" type="AudioStreamPlayer" parent="." unique_id=490449626]
+stream = ExtResource("3_can3l")
+autoplay = true
