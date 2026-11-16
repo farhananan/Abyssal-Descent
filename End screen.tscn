@@ -26,3 +26,4 @@ theme_override_styles/panel = SubResource("StyleBoxTexture_g7g1y")
 [node name="MfccWinnerWinnerChampionsVictoryMusic335679" type="AudioStreamPlayer" parent="." unique_id=490449626]
 stream = ExtResource("3_can3l")
 autoplay = true
+bus = &"Music"

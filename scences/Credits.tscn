@@ -15,3 +15,4 @@ script = ExtResource("1_tm5uj")
 [node name="MaksymmalkoVictoryNominationWinnerChampionMusic249655" type="AudioStreamPlayer" parent="." unique_id=570953252]
 stream = ExtResource("2_7uw1t")
 autoplay = true
+bus = &"Music"

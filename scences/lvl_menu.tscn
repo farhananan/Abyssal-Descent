@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://htmoqvlkqnbj" path="res://scences/lvl_menu.gd" id="1_8tlee"]
 [ext_resource type="Texture2D" uid="uid://ddo16f2deg5oj" path="res://scences/entrance.jpg" id="1_idd6b"]
 [ext_resource type="FontFile" uid="uid://qudkr1ott417" path="res://Assests/fonts/Noctra.otf" id="2_8tlee"]
+[ext_resource type="AudioStream" uid="uid://df3giqhu5hg12" path="res://scences/vaitsez-game-game-music-607172.mp3" id="2_yl438"]
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_yl438"]
 texture = ExtResource("1_idd6b")
@@ -58,6 +59,11 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_8tlee")
+
+[node name="VaitsezGameGameMusic607172" type="AudioStreamPlayer" parent="." unique_id=689882248]
+stream = ExtResource("2_yl438")
+autoplay = true
+bus = &"Music"
 
 [node name="Panel" type="Panel" parent="." unique_id=1664237661]
 layout_mode = 1
