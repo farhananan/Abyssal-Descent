@@ -380,7 +380,7 @@ show_percentage = false
 script = ExtResource("6_4mc5b")
 
 [node name="Test_Player" parent="." unique_id=759660980 instance=ExtResource("7_hrkvx")]
-position = Vector2(-246.00003, -1323.9995)
+position = Vector2(-252, -1323.9999)
 
 [node name="Camera2D" type="Camera2D" parent="Test_Player" unique_id=1731561640]
 zoom = Vector2(2.5, 2.5)
