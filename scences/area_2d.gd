@@ -1,18 +1,29 @@
 extends Area2D
 
+@export var damage: int = 1
+@export var damage_interval: float = 0.5
 
-# Called when the node enters the scene tree for the first time.
-func _ready() -> void:
-	pass # Replace with function body.
+var _bodies := []
+var _timer := 0.0
 
+func _ready():
+	body_entered.connect(_on_body_entered)
+	body_exited.connect(_on_body_exited)
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
-	pass
+func _on_body_entered(body):
+	if body.has_method("take_damage"):
+		_bodies.append(body)
+		body.take_damage(damage)
+		_timer = 0.0
 
+func _on_body_exited(body):
+	_bodies.erase(body)
 
-func _on_body_entered(body: Node2D) -> void:
-	if body.name == "Test_Player":
-		print("Player touched the fire!")
-	if body.name == "Test_Player":
-		body.take_damage(1)
+func _physics_process(delta):
+	if _bodies.is_empty():
+		return
+	_timer += delta
+	if _timer >= damage_interval:
+		_timer = 0.0
+		for b in _bodies:
+			b.take_damage(damage)
