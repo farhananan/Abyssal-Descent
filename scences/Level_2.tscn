@@ -8,7 +8,7 @@
 [ext_resource type="Script" uid="uid://b1sdfvki4ihpn" path="res://scences/progress_bar.gd" id="6_n0sqq"]
 [ext_resource type="PackedScene" uid="uid://c2nc8paun0x7x" path="res://scences/pause_menu.tscn" id="8_kb5eg"]
 [ext_resource type="Script" uid="uid://dd2hiogy0w3hd" path="res://scences/camera_2d.lvl1.gd" id="8_u8akg"]
-[ext_resource type="Script" uid="uid://dx3r4eav2p23e" path="res://scences/door_trigger.gd" id="9_58qye"]
+[ext_resource type="Script" uid="uid://c6qwv2s2avck5" path="res://scences/door_trigger_2.gd" id="9_58qye"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_wqipu"]
 texture = ExtResource("3_kb5eg")
@@ -1804,10 +1804,10 @@ sources/0 = SubResource("TileSetAtlasSource_wqipu")
 sources/1 = SubResource("TileSetAtlasSource_cgl87")
 sources/8 = SubResource("TileSetAtlasSource_n0sqq")
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_d61g1"]
-size = Vector2(15, 29)
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_u8akg"]
+size = Vector2(14.5, 30.875)
 
-[node name="Level_2" type="Node2D" unique_id=941202265]
+[node name="Level_3" type="Node2D" unique_id=941202265]
 
 [node name="TextureRect" type="TextureRect" parent="." unique_id=1246254655]
 texture_filter = 1
@@ -1851,10 +1851,9 @@ script = ExtResource("8_u8akg")
 
 [node name="PauseMenu" parent="." unique_id=157170144 instance=ExtResource("8_kb5eg")]
 
-[node name="Door Trigger" type="Area2D" parent="." unique_id=1839075322]
+[node name="Door Trigger2" type="Area2D" parent="." unique_id=754657122]
 script = ExtResource("9_58qye")
-next_level = "uid://dirtpvs1n30du"
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Door Trigger" unique_id=560539448]
-position = Vector2(343.5, 64.5)
-shape = SubResource("RectangleShape2D_d61g1")
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Door Trigger2" unique_id=1994827422]
+position = Vector2(342.25, 68)
+shape = SubResource("RectangleShape2D_u8akg")
