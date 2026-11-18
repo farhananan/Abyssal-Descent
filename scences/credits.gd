@@ -1,11 +1,11 @@
 extends Control
 
 const GAME_TITLE := "ABYSSAL DESCENT"
-const SCROLL_SPEED := 90.0        # how fast the text travels away; raise it to go faster
-const FAST_MULTIPLIER := 4.0      # hold Space/Enter or Down to speed up
-const FOCAL := 600.0              # perspective strength: smaller = steeper, more dramatic
-const HORIZON := 0.12             # how far down the screen (0 to 1) the text vanishes
-const CRAWL_COLOR := Color(1.0, 0.91, 0.12)  # the classic yellow
+const SCROLL_SPEED := 90.0        
+const FAST_MULTIPLIER := 4.0     
+const FOCAL := 600.0              
+const HORIZON := 0.12             
+const CRAWL_COLOR := Color(1.0, 0.91, 0.12)  
 const MAIN_MENU_SCENE := "res://scences/main_menu.tscn"
 
 # [what, who]
@@ -21,7 +21,7 @@ const CREDITS := [
 	["Code", "Everyone"],
 ]
 
-var lines: Array = []   # each entry: {"label": Label, "z": float}
+var lines: Array = []   
 var stars: Array = []
 var scroll := 0.0
 var started := false
@@ -33,7 +33,6 @@ func _ready() -> void:
 	_make_stars()
 	_build_lines()
 
-	# Back button, drawn on top of everything
 	var back := Button.new()
 	back.text = "Back"
 	back.focus_mode = Control.FOCUS_NONE
@@ -41,7 +40,6 @@ func _ready() -> void:
 	back.set_anchors_and_offsets_preset(Control.PRESET_TOP_LEFT, Control.PRESET_MODE_MINSIZE, 16)
 	back.pressed.connect(_go_back)
 
-	# Wait one frame so every label has a size, then set up its pivot for scaling
 	await get_tree().process_frame
 	for entry in lines:
 		var l: Label = entry["label"]
@@ -78,7 +76,6 @@ func _add_line(text: String, font_size: int, gap_after: float) -> void:
 	l.text = text
 	l.add_theme_font_size_override("font_size", font_size)
 	l.add_theme_color_override("font_color", CRAWL_COLOR)
-	# A thin outline in the same color makes the text look bolder
 	l.add_theme_color_override("font_outline_color", CRAWL_COLOR)
 	l.add_theme_constant_override("outline_size", 2)
 	l.visible = false
@@ -86,7 +83,6 @@ func _add_line(text: String, font_size: int, gap_after: float) -> void:
 	lines.append({"label": l, "z": _next_z})
 	_next_z -= font_size * 1.3 + gap_after
 
-# Black background with stars (drawn behind the labels)
 func _draw() -> void:
 	draw_rect(Rect2(Vector2.ZERO, size), Color.BLACK)
 	for s in stars:
@@ -102,11 +98,9 @@ func _process(delta: float) -> void:
 	scroll += speed * delta
 	_update_lines()
 
-	# Once the last line has faded into the distance, go back to the main menu
 	if lines.back()["z"] + scroll > FOCAL * 4.0:
 		_go_back()
 
-# Places every line using simple perspective: far lines are higher up, smaller and fainter
 func _update_lines() -> void:
 	var horizon_y := size.y * HORIZON
 	var bottom_y := size.y
@@ -114,18 +108,18 @@ func _update_lines() -> void:
 
 	for entry in lines:
 		var l: Label = entry["label"]
-		var z: float = entry["z"] + scroll  # 0 = bottom edge, bigger = farther away
+		var z: float = entry["z"] + scroll  
 
 		if z < -FOCAL * 0.3:
-			l.visible = false  # still waiting below the screen
+			l.visible = false  
 			continue
 
-		var p := FOCAL / (FOCAL + z)  # 1 at the bottom, shrinking toward 0
+		var p := FOCAL / (FOCAL + z)  
 		var y := horizon_y + (bottom_y - horizon_y) * p
 
 		l.scale = Vector2(p, p)
 		l.position = Vector2(center_x, y) - l.pivot_offset
-		l.modulate.a = clampf((p - 0.2) / 0.2, 0.0, 1.0)  # fade out in the distance
+		l.modulate.a = clampf((p - 0.2) / 0.2, 0.0, 1.0)  
 		l.visible = l.modulate.a > 0.0
 
 func _unhandled_input(event: InputEvent) -> void:

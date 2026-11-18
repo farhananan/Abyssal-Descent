@@ -22,6 +22,10 @@ const CRYSTAL_CHARGE_TIME = 0.7    # seconds you must hold the button before it'
 const CRYSTAL_SPEED = 600.0        # launch speed
 const CRYSTAL_MAX_TIME = 1.5       # the dash stops after this long even if no wall is hit
 
+# Tutorial texts (edit these to change what the boxes say)
+const WALL_JUMP_HINT := "Jump toward ice blocks and press Space while touching it to leap off the wall. Your double jump recharges, so you can chain wall jumps upward."
+const CRYSTAL_HINT := "Hold the dash button on ! block until you glow cyan, then let go to launch forward. You can also charge while clinging to its wall. A quick tap does a normal dash."
+
 var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
 var jumps_left = MAX_JUMPS
 var is_smashing = false
@@ -245,6 +249,25 @@ func _start_crystal_dash() -> void:
 	is_crystal_dashing = true
 	crystal_dash_timer = CRYSTAL_MAX_TIME
 
+# Shows a one-time tutorial box the first time we touch a special block
+func _check_tile_hints() -> void:
+	if Hints.has_shown("wall_jump") and Hints.has_shown("crystal_dash"):
+		return  # both already shown, nothing left to check
+
+	for i in get_slide_collision_count():
+		var col := get_slide_collision(i)
+		var tilemap := col.get_collider() as TileMapLayer
+		if tilemap == null:
+			continue
+
+		var probe := col.get_position() - col.get_normal() * 2.0
+		var coords := tilemap.local_to_map(tilemap.to_local(probe))
+
+		if _tile_has_flag(tilemap, coords, "wall_jump"):
+			Hints.show_once("wall_jump", "Wall Jump", WALL_JUMP_HINT)
+		if _tile_has_flag(tilemap, coords, "crystal_dash"):
+			Hints.show_once("crystal_dash", "Crystal Dash", CRYSTAL_HINT)
+
 func _on_smash_land():
 	is_smashing = false
 	smash_landed.emit(global_position)
@@ -299,6 +322,8 @@ func _input(event):
 		is_attacking = false
 
 func _process(_delta):
+	_check_tile_hints()
+
 	# Face the direction she is moving, and mirror the sword hitbox with her
 	sprite.flip_h = facing < 0
 	var side = 1.0 if facing >= 0 else -1.0

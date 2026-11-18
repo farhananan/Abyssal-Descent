@@ -1,6 +1,7 @@
 [gd_scene format=4 uid="uid://bcmklyyc3f2v6"]
 
 [ext_resource type="PackedScene" uid="uid://g7k0dw4hf3pb" path="res://test/test_player.tscn" id="1_00m41"]
+[ext_resource type="Script" uid="uid://c2vwsbrmsyd2g" path="res://scences/mvp.gd" id="1_jfxka"]
 [ext_resource type="Texture2D" uid="uid://hlclfoosa5ks" path="res://Assests/sprites/world_tileset.png" id="2_1h1fh"]
 [ext_resource type="Texture2D" uid="uid://bvw54t7fi831" path="res://Assests/sprites/tile_set_aleatorio.png" id="3_fdsva"]
 [ext_resource type="Script" uid="uid://dd2hiogy0w3hd" path="res://scences/camera_2d.lvl1.gd" id="3_fnkl7"]
@@ -272,6 +273,7 @@ animations = [{
 }]
 
 [node name="MVP" type="Node2D" unique_id=941202265]
+script = ExtResource("1_jfxka")
 
 [node name="TextureRect" type="TextureRect" parent="." unique_id=1246254655]
 z_index = -2
